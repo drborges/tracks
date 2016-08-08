@@ -20,6 +20,7 @@ body {
   flex-grow: 1;
   flex-basis: 0;
   flex-direction: column;
+  border-right: 1px dotted #ccc;
 }
 
 .board .column.drag-target {

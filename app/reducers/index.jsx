@@ -3,65 +3,55 @@ import { routerReducer } from 'react-router-redux'
 
 const track = (state = {}, action) => {
   if (action.type == 'FETCH_TRACK') {
-    console.log('Fetched:', action.track)
     return action.track
   }
 
   return state
 }
 
-const backlog = (state = {}, action) => {
-  if (action.type == 'FETCH_BACKLOG') {
-    console.log('backlog:', action.issues)
-    return { issues: action.issues }
-  }
+const createFetchCards = (column) =>
+  (state = [], action) =>
+    (action.type == `FETCH_${column.toUpperCase()}`) ?
+      { cards: action.cards } : state
 
-  return state
+const createMoveCardFromColumn = (source) =>
+  (state = [], action) =>
+    (action.type == "MOVE_CARD" && action.source == source) ?
+      { cards: state.cards.slice(0, action.cardIndex).concat(state.cards.slice(action.cardIndex + 1)) } : state
+
+const createMoveCardToColumn = (target) =>
+  (state = [], action) =>
+    (action.type == "MOVE_CARD" && action.target == target) ?
+      { cards: [action.card].concat(state.cards) } : state
+
+const todo = (state = [], action) => {
+  state = createFetchCards('todo')(state, action)
+  state = createMoveCardFromColumn('todo')(state, action)
+  return createMoveCardToColumn('todo')(state, action)
 }
 
-const todo = (state = {}, action) => {
-  if (action.type == 'FETCH_TODO') {
-    console.log('todo:', action.issues)
-    return { issues: action.issues }
-  }
-
-  return state
-}
-
-const developing = (state = {}, action) => {
-  if (action.type == 'FETCH_DEVELOPING') {
-    console.log('in progress:', action.issues)
-    return { issues: action.issues }
-  }
-
-  return state
+const developing = (state = [], action) => {
+  state = createFetchCards('developing')(state, action)
+  state = createMoveCardFromColumn('developing')(state, action)
+  return createMoveCardToColumn('developing')(state, action)
 }
 
 const testing = (state = {}, action) => {
-  if (action.type == 'FETCH_TESTING') {
-    console.log('in test:', action.issues)
-    return { issues: action.issues }
-  }
-
-  return state
+  state = createFetchCards('testing')(state, action)
+  state = createMoveCardFromColumn('testing')(state, action)
+  return createMoveCardToColumn('testing')(state, action)
 }
 
 const done = (state = {}, action) => {
-  if (action.type == 'FETCH_DONE') {
-    console.log('done:', action.issues)
-    return { issues: action.issues }
-  }
-
-  return state
+  state = createFetchCards('done')(state, action)
+  state = createMoveCardFromColumn('done')(state, action)
+  return createMoveCardToColumn('done')(state, action)
 }
 
 const live = (state = {}, action) => {
-  if (action.type == 'FETCH_LIVE') {
-    console.log('live:', action.issues)
-    return { issues: action.issues }
-  }
-
-  return state
+  state = createFetchCards('live')(state, action)
+  state = createMoveCardFromColumn('live')(state, action)
+  return createMoveCardToColumn('live')(state, action)
 }
 
 const errors = (state = '', action) => {
@@ -73,7 +63,6 @@ const errors = (state = '', action) => {
 
 const reducer = combineReducers({
   track,
-  backlog,
   todo,
   developing,
   testing,

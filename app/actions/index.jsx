@@ -32,7 +32,17 @@ export function fetchTrack(id) {
   }
 }
 
-export function fetchIssues(id, column = 'backlog') {
+export function moveCard(card, cardIndex, sourceColumn, targetColumn) {
+  return {
+    type: 'MOVE_CARD',
+    card: card,
+    cardIndex: cardIndex,
+    source: sourceColumn,
+    target: targetColumn,
+  }
+}
+
+export function fetchIssues(id, column = 'todo') {
   let issuesPathFor = {
     'backlog':    '/stories?filter=state:unstarted',
     'todo':       '/stories?filter=state:planned',
@@ -46,7 +56,7 @@ export function fetchIssues(id, column = 'backlog') {
     try {
       let response = await fetch(`${endpoint}/projects/${id}${issuesPathFor[column]}`, { headers: { 'X-TrackerToken': token }})
       let json = await response.json()
-      dispatch({ type: `FETCH_${column.toUpperCase()}`, issues: json })
+      dispatch({ type: `FETCH_${column.toUpperCase()}`, cards: json })
 
     } catch(e) {
       dispatch({ type: 'NETWORK_ERROR', error: e })
