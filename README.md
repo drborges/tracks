@@ -1,4 +1,4 @@
-# tracks
+# Tracks
 
 # Goal
 
@@ -13,16 +13,23 @@ in our development process.
 
 Tracks provides a Kanban Board UI using pivotal tracker as the backend. The following columns are initially present in tracks:
 
+Manual transitions:
 1. backlog
 2. Todo
 3. Developing
 4. Testing
-5. Ready for Prod
-6. Building
-7. Live
+5. Done (labels for 'building', 'deploying')
+
+Automated transitions:
+6. Live (triggered by Jenkins upon a successful deploy)
+
+Actions in Tracks are essentially drag and drop of cards across columns. Some moves are not allowed to be performed manually:
+
+Ready for Prod -> Building: is triggered upon a PR merge in github, causing the card to be automatically moved.
+Building -> Live: Triggered by Jenkins upon a successful deployment to production.
 
 
-# The workflow in Pivotal
+# The Pivotal backend
 
 1. Story is created in the backlog (state=`unstarted`, labels=[])
 2. Story is selected to the current sprint (state=`planned`, labels=[])
@@ -39,3 +46,21 @@ Tracks provides a Kanban Board UI using pivotal tracker as the backend. The foll
 9. Jenkins Deploy Build is triggerd:
   - Successful Deploy: Jenkins signals by accepting the story (state=`accepted`, labels=['tested', 'build_successful'])
   - Failed Deploy: Jenkins signals by adding label to the story (state=`delivered`, labels=['tested', 'build_successful', 'deploy_failure'])
+
+# Jenkins + Tracker Integration
+
+### Tracker Activities Webhook API
+
+Tracks will leverage [this API](http://www.pivotaltracker.com/help/articles/activity_webhook) to implement real time updates.
+
+When the master build turns green:
+
+```
+curl -XPUT -H "X-TrackerToken: $TOKEN" "https://www.pivotaltracker.com/services/v5/stories/127433133" -H "Content-type: application/json" -d '{ "current_state": "delivered" }'
+```
+
+When the production deployment succeeds:
+
+```
+curl -XPUT -H "X-TrackerToken: $TOKEN" "https://www.pivotaltracker.com/services/v5/stories/127433133" -H "Content-type: application/json" -d '{ "current_state": "accepted" }'
+```
