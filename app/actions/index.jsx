@@ -20,6 +20,12 @@ export function fetchTrack(id) {
 
       dispatch({ type: 'FETCH_TRACK', track: json })
 
+      dispatch(fetchIssues(1438516, 'todo'))
+      dispatch(fetchIssues(1438516, 'developing'))
+      dispatch(fetchIssues(1438516, 'testing'))
+      dispatch(fetchIssues(1438516, 'done'))
+      dispatch(fetchIssues(1438516, 'live'))
+
     } catch(e) {
       dispatch({ type: 'NETWORK_ERROR', error: e })
     }
@@ -28,12 +34,12 @@ export function fetchTrack(id) {
 
 export function fetchIssues(id, column = 'backlog') {
   let issuesPathFor = {
-    'backlog':     '/stories?filter=state:unstarted',
+    'backlog':    '/stories?filter=state:unstarted',
     'todo':       '/stories?filter=state:planned',
     'developing': '/stories?filter=state:started',
-    'testing':     '/stories?filter=state:started&filter=label:testing',
-    'building':    '/stories?filter=state:delivered',
-    'live':        '/stories?filter=state:accepted',
+    'testing':    '/stories?filter=state:started&filter=label:testing',
+    'done':       '/stories?filter=state:started,delivered&filter=label:tested',
+    'live':       '/stories?filter=state:accepted',
   }
 
   return async (dispatch) => {

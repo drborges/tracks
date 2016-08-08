@@ -46,9 +46,9 @@ const testing = (state = {}, action) => {
   return state
 }
 
-const building = (state = {}, action) => {
-  if (action.type == 'FETCH_BUILDING') {
-    console.log('building:', action.issues)
+const done = (state = {}, action) => {
+  if (action.type == 'FETCH_DONE') {
+    console.log('done:', action.issues)
     return { issues: action.issues }
   }
 
@@ -77,7 +77,7 @@ const reducer = combineReducers({
   todo,
   developing,
   testing,
-  building,
+  done,
   live,
   errors,
   routing: routerReducer

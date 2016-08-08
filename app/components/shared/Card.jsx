@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Card = (props) => (
-  <li className="card">
+  <li className="card" draggable="true">
     <div className="header">{props.issue.id}</div>
     <div className="body">{props.issue.name}</div>
     <div className="footer"></div>
