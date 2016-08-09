@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react'
 import { markdown } from 'markdown'
 
 import { store } from 'app/store'
@@ -27,7 +28,12 @@ class Card extends React.Component {
           store.dispatch(actions.startDrag())
           e.dataTransfer.setData('application/json', JSON.stringify({ card: this.props.card, cardIndex: this.props.index, source: this.props.column }))
         }}>
-        <div className="header">{this.props.card.id}</div>
+        <div className="header">
+          <a href={`https://www.pivotaltracker.com/story/show/${this.props.card.id}`} target="_blank" className="tracker-link">
+            <img width="20px" height="20px" className="tracker-logo" src="/app/assets/img/pivotaltracker-logo.png" />
+            <span className="card-number">{this.props.card.id}</span>
+          </a>
+        </div>
         <div
           className="body"
           contentEditable="true"

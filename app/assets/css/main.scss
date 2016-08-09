@@ -60,9 +60,25 @@ body {
 }
 
 .board .card .header {
+  display: flex;
   padding: 10px 10px 5px 10px;
+  font-size: 12px;
+}
+
+.board .card .tracker-link {
+  display: flex;
+  align-items: center;
   color: #54acef;
-  font-size: 10px;
+  text-decoration: none;
+}
+
+.board .card .tracker-link:hover {
+  color: #1e7ec7;
+  cursor: pointer;
+}
+
+.board .card .card-number {
+  padding-left: 5px;
 }
 
 .board .card .body {
