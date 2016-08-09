@@ -23,6 +23,10 @@ body {
   border-right: 1px dotted #ccc;
 }
 
+.no-pointer-events {
+  pointer-events: none;
+}
+
 .board .column.drag-target {
   background-color: #ccc;
   box-shadow: inset 0 0 3px #aaa;

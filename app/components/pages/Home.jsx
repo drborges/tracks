@@ -11,6 +11,7 @@ const Home = (props) => {
         testing={props.testing}
         done={props.done}
         live={props.live}
+        dragStarted={props.dragStarted}
         />
     </section>
   )

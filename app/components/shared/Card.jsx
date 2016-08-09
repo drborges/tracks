@@ -1,17 +1,21 @@
 import React from 'react'
 import { markdown } from 'markdown'
 
+import { store } from 'app/store'
+import * as actions from 'app/actions'
+
 class Card extends React.Component {
-  state = { editing: false }
+  state = { editing: false, dragging: false }
 
   render() {
+    let style = this.state.dragging || !this.props.dragStarted ? 'card' : 'card no-pointer-events'
     let bodyHTML = this.state.editing ?
       this.props.card.name :
       markdown.toHTML(this.props.card.name)
 
-    return (
+  return (
       <li
-        className="card"
+        className={style}
         draggable="true"
         onDragEnd={() => {
           this.setState({ dragging: false })

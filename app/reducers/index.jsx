@@ -61,6 +61,11 @@ const errors = (state = '', action) => {
   return state
 }
 
+const dragStarted = (state = false, action) => {
+  return action.type == 'START_DRAG' || action.type == 'STOP_DRAG' ?
+    action.dragStart : state
+}
+
 const reducer = combineReducers({
   track,
   todo,
@@ -69,6 +74,7 @@ const reducer = combineReducers({
   done,
   live,
   errors,
+  dragStarted,
   routing: routerReducer
 })
 

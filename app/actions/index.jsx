@@ -32,6 +32,20 @@ export function fetchTrack(id) {
   }
 }
 
+export function startDrag() {
+  return {
+    type: 'START_DRAG',
+    dragStart: true,
+  }
+}
+
+export function stopDrag() {
+  return {
+    type: 'STOP_DRAG',
+    dragStart: false,
+  }
+}
+
 export function moveCard(card, cardIndex, sourceColumn, targetColumn) {
   return {
     type: 'MOVE_CARD',

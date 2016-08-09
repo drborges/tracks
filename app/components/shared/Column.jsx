@@ -12,7 +12,8 @@ class Column extends React.Component {
     let badgeCount = this.props.cards ? this.props.cards.length : 0
     let style = this.state.draggingOver ? "column drag-target" : "column"
     let cards = this.props.cards ?
-      this.props.cards.map((card, i) => <Card key={card.id} index={i} column={this.props.name} card={card} />) : []
+      this.props.cards.map((card, i) =>
+        <Card key={card.id} index={i} dragStarted={this.props.dragStarted} column={this.props.name} card={card} />) : []
 
     return (
       <div className={style}
@@ -24,6 +25,7 @@ class Column extends React.Component {
           let data = JSON.parse(e.dataTransfer.getData('application/json'))
           let fromColumn = data.source
           let toColumn = this.props.name
+          store.dispatch(actions.stopDrag())
           store.dispatch(actions.moveCard(data.card, data.cardIndex, fromColumn, toColumn))
         }}>
 
