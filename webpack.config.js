@@ -25,7 +25,7 @@ module.exports = {
     hot: true,
     stats: 'errors-only'
   },
-  devtool: 'eval-source-map',
+  devtool: 'cheap-module-source-map',
   module: {
     loaders: [
       {
