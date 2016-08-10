@@ -1,6 +1,123 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 
+const initialState = {
+  board: {
+    name: '',
+    dragging: false,
+    columns: {
+      todo: {
+        name: 'todo',
+        loading: false,
+        draggingOver: false,
+        cards: [],
+      },
+      developing: {
+        name: 'developing',
+        loading: false,
+        draggingOver: false,
+        cards: [],
+      },
+      testing: {
+        name: 'testing',
+        loading: false,
+        draggingOver: false,
+        cards: [],
+      },
+      done: {
+        name: 'done',
+        loading: false,
+        draggingOver: false,
+        cards: [],
+      },
+      live: {
+        name: 'live',
+        loading: false,
+        draggingOver: false,
+        cards: [],
+      }
+    }
+  },
+  loading: false,
+  errors: []
+}
+
+export const board = (state = initialState, action) => {
+  switch (action.type) {
+    case 'FETCH_TRACK':
+      return { ...state, name: action.track.name }
+
+    case 'BOARD_START_DRAG':
+      return { ...state, dragging: true }
+
+    case 'BOARD_STOP_DRAG':
+      return { ...state, dragging: false }
+
+    case 'TODO_FETCH_CARDS':
+      return {
+        ...state,
+        columns: {
+          ...state.columns,
+          todo: {
+            ...state.columns.todo,
+            cards: action.cards
+          }
+        }
+      }
+
+    case 'TODO_REMOVE_CARD':
+      let cards = state.columns.todo.cards
+      return {
+        ...state,
+        columns: {
+          ...state.columns,
+          todo: {
+            ...state.columns.todo,
+            cards: cards.slice(0, action.index).concat(cards.slice(action.index + 1))
+          }
+        }
+      }
+
+    case 'TODO_ADD_CARD':
+      return {
+        ...state,
+        columns: {
+          ...state.columns,
+          todo: {
+            ...state.columns.todo,
+            cards: [action.card].concat(state.columns.todo.cards)
+          }
+        }
+      }
+
+    case 'TODO_DRAG_ENTER':
+      return {
+        ...state,
+        columns: {
+          ...state.columns,
+          todo: {
+            ...state.columns.todo,
+            draggingOver: true
+          }
+        }
+      }
+    case 'TODO_DRAG_LEAVE':
+      return {
+        ...state,
+        columns: {
+          ...state.columns,
+          todo: {
+            ...state.columns.todo,
+            draggingOver: false
+          }
+        }
+      }
+    default:
+      return state
+  }
+
+}
+
 const track = (state = {}, action) => {
   if (action.type == 'FETCH_TRACK') {
     return action.track
