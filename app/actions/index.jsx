@@ -32,27 +32,57 @@ export function fetchTrack(id) {
   }
 }
 
-export function startDrag() {
+export function dragEnter(column) {
   return {
-    type: 'START_DRAG',
-    dragStart: true,
+    type: `${column.toUpperCase()}_DRAG_ENTER`
   }
 }
 
-export function stopDrag() {
+export function dragLeave(column) {
   return {
-    type: 'STOP_DRAG',
-    dragStart: false,
+    type: `${column.toUpperCase()}_DRAG_LEAVE`
   }
 }
 
-export function moveCard(card, cardIndex, sourceColumn, targetColumn) {
+export function dragStart() {
   return {
-    type: 'MOVE_CARD',
+    type: 'BOARD_START_DRAG',
+  }
+}
+
+export function dragStop() {
+  return {
+    type: 'BOARD_STOP_DRAG',
+  }
+}
+
+export function dragCard(index, column) {
+  return {
+    type: 'DRAG_CARD',
+    index: index,
+    column: column,
+  }
+}
+
+export function dropCard(index, column) {
+  return {
+    type: 'DROP_CARD',
+    index: index,
+    column: column,
+  }
+}
+
+export function removeCard(column, index) {
+  return {
+    type: `${column.toUpperCase()}_REMOVE_CARD`,
+    index: index,
+  }
+}
+
+export function addCard(column, card) {
+  return {
+    type: `${column.toUpperCase()}_ADD_CARD`,
     card: card,
-    cardIndex: cardIndex,
-    source: sourceColumn,
-    target: targetColumn,
   }
 }
 
@@ -70,7 +100,15 @@ export function fetchIssues(id, column = 'todo') {
     try {
       let response = await fetch(`${endpoint}/projects/${id}${issuesPathFor[column]}`, { headers: { 'X-TrackerToken': token }})
       let json = await response.json()
-      dispatch({ type: `FETCH_${column.toUpperCase()}`, cards: json })
+      let cards = json.map(item => {
+        return {
+          id: item.id,
+          name: item.name,
+          editing: false,
+          dragging: false,
+      }})
+
+      dispatch({ type: `${column.toUpperCase()}_FETCH_CARDS`, cards: cards })
 
     } catch(e) {
       dispatch({ type: 'NETWORK_ERROR', error: e })

@@ -2,14 +2,16 @@ import React from 'react'
 
 import Column from 'app/components/shared/Column'
 
-const Board = (props) => (
-  <div className="board">
-    <Column name="todo" title="Todo" cards={props.todo.cards} dragStarted={props.dragStarted} />
-    <Column name="developing" title="Developing" cards={props.developing.cards} dragStarted={props.dragStarted} />
-    <Column name="testing" title="Testing" cards={props.testing.cards} dragStarted={props.dragStarted} />
-    <Column name="done" title="Done" cards={props.done.cards} dragStarted={props.dragStarted} />
-    <Column name="live" title="Live" cards={props.live.cards} dragStarted={props.dragStarted} />
-  </div>
-)
+const Board = (props) => {
+  return (
+    <div className="board">
+      <Column {...props.board.columns.todo} dragStarted={props.board.dragStarted} />
+      <Column {...props.board.columns.developing} dragStarted={props.board.dragStarted} />
+      <Column {...props.board.columns.testing} dragStarted={props.board.dragStarted} />
+      <Column {...props.board.columns.done} dragStarted={props.board.dragStarted} />
+      <Column {...props.board.columns.live} dragStarted={props.board.dragStarted} />
+    </div>
+  )
+}
 
 export default Board
